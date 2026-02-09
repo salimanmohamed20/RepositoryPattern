@@ -1,40 +1,21 @@
 🚀 Laravel CRUD Module Generator
 
 A powerful Artisan command to automatically generate a full CRUD module following the Repository Design Pattern with clean architecture and best practices.
+# Laravel CRUD Module Generator
 
-This tool helps teams:
+A small Artisan helper to generate a complete CRUD module following the Repository pattern, with a Service layer, Form Requests, and automatic binding.
 
-Reduce boilerplate code
+## Features
 
-Enforce consistent architecture
+- Generates a Repository Interface and Eloquent implementation
+- Generates a Service class to encapsulate business logic
+- Generates an API Controller with standard CRUD methods
+- Generates a Form Request that extends a shared `BaseFormRequest`
+- Adds automatic binding in `RepositoryServiceProvider`
 
-Speed up development
+## Architecture (example)
 
-Improve onboarding for new developers
-
-✨ Features
-
-Automatically generates:
-
-✅ Repository Interface
-
-✅ Eloquent Repository Implementation
-
-✅ Service Layer
-
-✅ API Controller with full CRUD methods
-
-✅ Form Request extending a shared BaseFormRequest
-
-✅ Automatic Repository Binding in Service Provider
-
-All generated files are fully wired together and ready to use.
-
-
-
-🧱 Architecture Overview
-
-This generator enforces the following structure:
+Generated layout (example):
 
 app/
 ├── Repositories/
@@ -51,11 +32,14 @@ app/
 │   └── Requests/
 │       ├── BaseFormRequest.php
 │       └── UserRequest.php
-├── Providers/
-│   └── RepositoryServiceProvider.php
+└── Providers/
+    └── RepositoryServiceProvider.php
 
-⚙️ Installation
-1. Create BaseFormRequest (once)
+## Quick Setup
+
+1. Create a shared `BaseFormRequest` (one-time):
+
+```php
 // app/Http/Requests/BaseFormRequest.php
 namespace App\Http\Requests;
 
@@ -70,54 +54,43 @@ abstract class BaseFormRequest extends FormRequest
 
     abstract public function rules(): array;
 }
+```
 
-2. Create Repository Service Provider
+2. Ensure you have a `RepositoryServiceProvider` (create if needed):
+
+```bash
 php artisan make:provider RepositoryServiceProvider
+```
 
+3. Add the generator command (example name `MakeCrudModule`):
 
-
-
-3. Add the Artisan Command
-
-Create the command:
-
+```bash
 php artisan make:command MakeCrudModule
+# Put the implementation in app/Console/Commands/MakeCrudModule.php
+```
 
+## Usage
 
-Add the full command implementation to:
+Run the generator:
 
-app/Console/Commands/MakeCrudModule.php
-
-🛠 Usage
-
-Run the command:
-
+```bash
 php artisan make:crud-module User
+```
 
+What it creates:
 
-This will generate:
+- `UserRepositoryInterface`
+- `UserRepository` (Eloquent)
+- `UserService`
+- `UserController` (API)
+- `UserRequest`
+- Automatic binding entry in `RepositoryServiceProvider`
 
-UserRepositoryInterface
+## Automatic Binding Example
 
-UserRepository
+The command will add a binding similar to:
 
-UserService
-
-UserController
-
-UserRequest
-
-Automatic binding in RepositoryServiceProvider
-
-🔗 Automatic Binding
-
-The command will automatically add this to:
-
-app/Providers/RepositoryServiceProvider.php
-
-
-Example:
-
+```php
 public function register(): void
 {
     $this->app->bind(
@@ -125,13 +98,14 @@ public function register(): void
         \App\Repositories\Eloquent\UserRepository::class
     );
 }
+```
 
-🧪 Generated Controller Example
+## Generated Controller Example
+
+```php
 class UserController extends Controller
 {
-    public function __construct(
-        protected UserService $service
-    ) {}
+    public function __construct(protected UserService $service) {}
 
     public function index()
     {
@@ -158,3 +132,10 @@ class UserController extends Controller
         return $this->service->delete($id);
     }
 }
+```
+
+## Notes
+
+- The generator aims to reduce boilerplate and enforce a consistent structure.
+- Files created are examples — adapt namespaces and signatures to your project needs.
+
