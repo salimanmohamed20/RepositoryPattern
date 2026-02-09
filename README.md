@@ -1,7 +1,4 @@
-🚀 Laravel CRUD Module Generator
-
-A powerful Artisan command to automatically generate a full CRUD module following the Repository Design Pattern with clean architecture and best practices.
-# Laravel CRUD Module Generator
+# 🚀 Laravel CRUD Module Generator
 
 A small Artisan helper to generate a complete CRUD module following the Repository pattern, with a Service layer, Form Requests, and automatic binding.
 
@@ -17,6 +14,7 @@ A small Artisan helper to generate a complete CRUD module following the Reposito
 
 Generated layout (example):
 
+```
 app/
 ├── Repositories/
 │   ├── Interfaces/
@@ -34,6 +32,7 @@ app/
 │       └── UserRequest.php
 └── Providers/
     └── RepositoryServiceProvider.php
+```
 
 ## Quick Setup
 
